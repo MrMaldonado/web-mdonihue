@@ -1,5 +1,5 @@
 import { ref, readonly } from 'vue'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import type { User, Session } from '@supabase/supabase-js'
 
 interface Profile {
@@ -22,6 +22,11 @@ function initAuth() {
   if (initialized) return
   initialized = true
 
+  if (!isSupabaseConfigured || !supabase) {
+    loading.value = false
+    return
+  }
+
   supabase.auth.getSession().then(({ data }) => {
     session.value = data.session
     user.value = data.session?.user ?? null
@@ -43,6 +48,8 @@ function initAuth() {
 }
 
 async function fetchProfile(userId: string) {
+  if (!isSupabaseConfigured || !supabase) return
+
   const { data, error } = await supabase
     .from('profiles')
     .select('*')
@@ -55,6 +62,10 @@ async function fetchProfile(userId: string) {
 }
 
 async function signIn(email: string, password: string) {
+  if (!isSupabaseConfigured || !supabase) {
+    throw new Error('Supabase no esta configurado. Contacta al administrador.')
+  }
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -64,6 +75,8 @@ async function signIn(email: string, password: string) {
 }
 
 async function signOut() {
+  if (!isSupabaseConfigured || !supabase) return
+
   const { error } = await supabase.auth.signOut()
   if (error) throw error
   user.value = null
