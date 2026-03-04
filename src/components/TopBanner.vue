@@ -3,7 +3,7 @@
     <!-- Imagen de fondo del top banner (opcional) -->
     <img
       v-if="bannerImage"
-      src="C:\Users\MMHua\OneDrive\Documentos\Pagina Doñihue\PaginaDonihue - copia\src\assets\481274348_688022253552607_5509384155917648051_n.jpg"
+      :src="bannerImage"
       alt="Banner superior"
       class="absolute inset-0 h-full w-full object-cover"
     />

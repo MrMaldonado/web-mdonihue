@@ -80,9 +80,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-vue-next'
+import { supabase } from '@/lib/supabase'
 
 interface Slide {
   image?: string
@@ -92,30 +93,29 @@ interface Slide {
   description?: string
 }
 
-// Slides con placeholders - reemplaza image con la URL real cuando tengas las imagenes
-const slides = ref<Slide[]>([
+// Fallback por defecto
+const defaultSlides: Slide[] = [
   {
-    image: 'src/assets/1.jpg',
     alt: 'Banner principal 1',
     badge: 'Bienvenidos',
-    title: 'Municipalidad de Doñihue',
+    title: 'Municipalidad de Donihue',
     description: 'Trabajamos por el bienestar y desarrollo de nuestra comuna.',
   },
   {
-    image: 'src/assets/Captura de pantalla 2026-03-02 125334.png',
     alt: 'Banner principal 2',
     badge: 'Servicios',
     title: 'Tramites en linea',
     description: 'Realiza tus tramites municipales de forma rapida y segura.',
   },
   {
-    image: 'src/assets/Captura de pantalla 2026-03-02 125443.png',
     alt: 'Banner principal 3',
     badge: 'Comunidad',
     title: 'Programas Sociales',
     description: 'Descubre los programas y beneficios disponibles para tu familia.',
   },
-])
+]
+
+const slides = ref<Slide[]>(defaultSlides)
 
 const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true })
 const selectedIndex = ref(0)
@@ -126,7 +126,33 @@ function scrollPrev() { emblaApi.value?.scrollPrev() }
 function scrollNext() { emblaApi.value?.scrollNext() }
 function scrollTo(index: number) { emblaApi.value?.scrollTo(index) }
 
-onMounted(() => {
+async function loadSlidesFromSupabase() {
+  try {
+    const { data, error } = await supabase
+      .from('banner_slides')
+      .select('*')
+      .order('sort_order', { ascending: true })
+
+    if (!error && data && data.length > 0) {
+      slides.value = data.map((s) => ({
+        image: s.image_url || undefined,
+        alt: s.alt || '',
+        badge: s.badge || undefined,
+        title: s.title || undefined,
+        description: s.description || undefined,
+      }))
+      // Reiniciar embla despues de actualizar slides
+      await nextTick()
+      emblaApi.value?.reInit()
+    }
+  } catch {
+    // Si falla la carga, usa los slides por defecto
+  }
+}
+
+onMounted(async () => {
+  await loadSlidesFromSupabase()
+
   const api = emblaApi.value
   if (!api) return
   const onSelect = () => { selectedIndex.value = api.selectedScrollSnap() }
