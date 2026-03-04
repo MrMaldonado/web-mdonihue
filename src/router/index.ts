@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -27,6 +27,10 @@ const router = createRouter({
 // Guard de navegacion para rutas protegidas
 router.beforeEach(async (to, _from, next) => {
   if (to.meta.requiresAuth) {
+    if (!isSupabaseConfigured || !supabase) {
+      next({ name: 'login' })
+      return
+    }
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
       next({ name: 'login' })
