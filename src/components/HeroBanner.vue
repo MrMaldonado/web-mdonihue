@@ -83,7 +83,7 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import emblaCarouselVue from 'embla-carousel-vue'
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-vue-next'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 interface Slide {
   image?: string
@@ -127,6 +127,7 @@ function scrollNext() { emblaApi.value?.scrollNext() }
 function scrollTo(index: number) { emblaApi.value?.scrollTo(index) }
 
 async function loadSlidesFromSupabase() {
+  if (!isSupabaseConfigured || !supabase) return
   try {
     const { data, error } = await supabase
       .from('banner_slides')
