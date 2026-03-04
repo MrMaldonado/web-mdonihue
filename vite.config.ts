@@ -10,9 +10,6 @@ export default defineConfig(({ mode }) => {
   const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL || env.SUPABASE_URL || env.VITE_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || ''
   const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY || env.SUPABASE_ANON_KEY || env.VITE_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || ''
 
-  console.log('[v0-vite] Resolved supabaseUrl:', !!supabaseUrl)
-  console.log('[v0-vite] Resolved supabaseAnonKey:', !!supabaseAnonKey)
-
   return {
     plugins: [vue(), tailwindcss()],
     resolve: {
