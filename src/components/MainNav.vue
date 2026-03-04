@@ -43,6 +43,15 @@
         </li>
       </ul>
 
+      <!-- Boton Login Desktop -->
+      <button
+        class="hidden items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 lg:flex"
+        @click="router.push('/login')"
+      >
+        <LogIn class="h-4 w-4" />
+        Iniciar sesion
+      </button>
+
       <!-- Mobile toggle -->
       <button
         class="rounded-md p-2 text-secondary-foreground lg:hidden hover:bg-primary/20"
@@ -76,13 +85,24 @@
           </ul>
         </li>
       </ul>
+      <!-- Boton Login Mobile -->
+      <button
+        class="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+        @click="router.push('/login'); mobileOpen = false"
+      >
+        <LogIn class="h-4 w-4" />
+        Iniciar sesion
+      </button>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Menu, X, ChevronDown, ImageIcon } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+import { Menu, X, ChevronDown, ImageIcon, LogIn } from 'lucide-vue-next'
+
+const router = useRouter()
 
 const mobileOpen = ref(false)
 const openDropdown = ref<string | null>(null)
