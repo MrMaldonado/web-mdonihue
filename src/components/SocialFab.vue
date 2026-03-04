@@ -25,7 +25,7 @@
       ]"
     >
       <a
-        href="https://www.facebook.com"
+        href="https://www.facebook.com/municipalidaddedonihue"
         target="_blank"
         rel="noopener noreferrer"
         class="flex h-12 w-12 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-lg transition-transform hover:scale-110"
@@ -34,7 +34,7 @@
         <Facebook class="h-5 w-5" />
       </a>
       <a
-        href="https://www.instagram.com"
+        href="https://www.instagram.com/munidonihue/"
         target="_blank"
         rel="noopener noreferrer"
         class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white shadow-lg transition-transform hover:scale-110"

@@ -42,4 +42,11 @@ router.beforeEach(async (to, _from, next) => {
   }
 })
 
+const routes = [
+  {
+    path: '/otra-pagina', // <- ESTE es el nombre que debes poner en el 'to'
+    name: 'OtraPagina',
+    component: () => import('../views/OtraPaginaView.vue')
+  }
+]
 export default router
